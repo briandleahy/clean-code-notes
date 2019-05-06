@@ -53,10 +53,13 @@ Functions
 
 Exceptions & Errors
 --------------------
-1.  *It's better to raise an exception than return an error code.*
+1.  *Use exceptions rather than error codes.*
     Exceptions force the caller to deal with them immediately, but an error code can easily get ignored, leading to problems down the line.
 2.  *Extract try-except blocks.*
     Error processing should be distinct from regular processing (cf. "Functions should do one thing"; error handling is a thing). Plus, the fewer lines in the `try-except` block, the less the possibilities of additional exceptions slipping through.
+3.  *Provide context when you raise an exception.*
+    Use informative error messages, that describe the intent of the operation that failed.
+
 
 Comments
 --------
@@ -88,9 +91,64 @@ Formatting
 6.  *Related concepts and methods should appear nearby in the file.*
 
 
+Objects vs Data Structures
+--------------------------
+1.  *Distinguish between objects, which hide their data behind abstractions and expose functions that operate on that data, and data structures, which expose their data and have no meaningful functions.*
+2.  *Law of Demeter: A module should not know about the innards of the objects it manipulates.*.
+    For instance, a method `f` of class `C` should only call the methods of `C`, an object created by `f`, an object passed as argument to `f`, or an instance variable of `C`.
+
+
+Third-Party Code & UndevelopedCode
+----------------------------------
+1.  *Constrain the behavior of the outside code with tests.*
+    Use "learning tests," where you write tests as you figure out the API of the code. Then, when you understand the outside code, you have a series of unit tests that will quickly tell you if the outside code has changed due to an update in an important way.
+2.  *Define a "dream api" for yet-unwritten code.*
+    This lets you continue working on outside areas, and allows the unwritted code to be modular with respect to the rest of the code base.
+
+
+Tests & Test-Driven Development
+-------------------------------
+1.  *Follow TDD.*
+    The three laws of TDD are:
+    1.  You may not write production code until you have written a failing unit test.
+    2.  You may not write more of a unit test than is sufficient to fail, and not compiling is failing.
+    3.  You may not write more production code than is sufficient to pass the currenlty failing test.
+
+    Following these laws will give you hundreds of tests, covering all of your code base.
+2.  *Keep the tests clean and readable.*
+    The tests need to follow the same high standards for cleanliness as the rest of the code. Otherwise, when the code changes, it will be difficult to chnage the tests to keep up.
+3.  *There should be one assert per test, which should test one concept.*
+    This makes it much easier to see what aspect of the code is failing. If this leads to duplication, split the duplication out into test-suite-specific objects or functions. And no cheating with `and` in the assert statement.
+4.  *Tests should be fast.*
+    They should run quickly enough where you can run them all the time. A few seconds for the entire test suite is the upper limit on speed.
+5.  *Tests should be independent.*
+    One test should not set up the conditions for the next test. Each tests should produce the same result independent of the ordering in which the tests were run.
+6.  *Tests should be repeatable.*
+    They should test the same thing in any environment. Repeatability also means that if you're using randomness, you must set the seed to a specific value.
+7.  *Tests sould be self-validating.*
+    The test should give a boolean output of pass or fail. You should not have to process the test results to see if it fails.
+8.  *Tests should be timely.*
+    Write the tests *before* you write the production code, or, worse case, right after. Don't do it 6 months later.
+9.  *Writing tests is liberating. It allows you to change the code freely -- if it doesn't break a test, then go ahead and change the code.*
+    This is Brian's experience as well :)
+
+
+
+Classes
+-------
+1.  *Classes should be small.*
+    As a ballpark, classes should be < 100 lines. Since we said before functions should be <20 lines, a code smell is if the class has more than 5-ish methods.
+2.  *Classes should have a single responsibility.*
+    As a code smell, look at the class name. The class name should describe one responsibility of the class. If you can't write a concise name, then perhaps the class is too large. A class names that includes `Processor`, `Manager`, or `Super` is a hint that the class has multiple responsibilities. Since a class has a single responsibility, its code should have only one reason to change.
+3.  *Classes should have a small number of instance variables.*
+4.  *Classes should be cohesive.*
+    Measure cohesion by how many methods use what fraction of the instance variables. In a maximally cohesive class, all the methods use all the instance variables. If you can split the methods and instance variables into two non-intersecting groups, that's a good sign your class is too big.
+5.  *Maintaining cohesion results in many small classes.*
+
 
 Files
 -----
 1.  *Small files are good.*
     It's easier to understand what goes on in a small file than in a large one. Uncle Bob's examples are files usually less than 200 lines.
+
 
