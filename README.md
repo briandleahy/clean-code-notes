@@ -2,7 +2,7 @@ General
 -------
 1.  *Leave the codebase cleaner than you found it.*
 2.  *Clarity is king.*
-3.  *Iteratively improve your code, just you would iteratively improve a paper draft.*
+3.  *Iteratively improve your code, just as you would iteratively improve a paper draft.*
 
 
 Names
